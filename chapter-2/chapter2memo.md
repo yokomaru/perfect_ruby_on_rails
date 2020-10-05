@@ -57,13 +57,7 @@ ARにQIが呼ばれると、Activerecord::Relationのインスタンスが生成
   Book Load (0.4ms)  SELECT "books".* FROM "books" WHERE (price > 2000) ORDER BY "books"."name" ASC LIMIT ?  [["LIMIT", 3]]
 => [#<Book id: 3, name: "Book 3", published_on: "2020-07-03", price: 3000, number_of_page: nil, created_at: "2020-10-03 09:01:07", updated_at: "2020-10-03 09:01:07">, #<Book id: 4, name: "Book 4", published_on: "2020-06-03", price: 4000, number_of_page: nil, created_at: "2020-10-03 09:01:07", updated_at: "2020-10-03 09:01:07">, #<Book id: 5, name: "Book 5", published_on: "2020-05-03", price: 5000, number_of_page: nil, created_at: "2020-10-03 09:01:07", updated_at: "2020-10-03 09:01:07">]
 
-
-
 Book.create(name: "Book test", published_on: Date.today, price: 2000)
-
-V View
-Modelの内容を参照し視覚表現を行う部分
-C Controller
 
 validates_associated 関連先のレコード
 confirmation　emailなどのように
@@ -109,4 +103,73 @@ update_counters
 
 ActiveRecordでenum
 
+## コントローラーの役割
+C Controller
+
+before_action jikkouame
+
+after_action　実行後
+aroud_action 前後
+
+before_action do end で囲める
+親クラスで異定義したアクションコールバックをスキップするのもできる
+
+resourcesの拡張
+
+member do
+end
+
+collection
+do
+resourcesの中にresources
+hoges/:hoges_id/hugas/:id
+
+## resources以外のルーティング
+一つしかない場合はresourde
+
+POST /profile/(format)
+GET/profile/new
+GET/profile/wdit
+GET/profile/(format)
+PATCH/profile/(format)
+PUT DELETE/profile/(format)
+/profile/(format)
+
+indexはなし
+
+V View
+Modelの内容を参照し視覚表現を行う部分
+
+例外処理
+rescure_from
+
+class Login複数のコントローラにまたがった例外処理などをredcurefromをうt買えば見通しが良くなる
+Failed < StandardError
+end
+
+StrongPrameters
+# mass assignment
+モデルをハッシュクラスを使って属性を設定できる
+つかwな合わない
+user = User.find(1)
+user.name ~~
+
+user.update(name:,)
+class APplidationContoller
+
+意図しない属性の変更を許してしまう
+param社ユーザが送ってきたHTTPrikusesuo
+admin=treu
+うわがかれる
+Stringparamerterはできるkeyを検査する
+
+params.require(:user).permit(:name, :email)
+parametermissing
+
+def user_params
+if current_user.admin?
+params admin
+else
+params
+end
 
