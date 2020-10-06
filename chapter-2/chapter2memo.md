@@ -137,9 +137,6 @@ PUT DELETE/profile/(format)
 
 indexはなし
 
-V View
-Modelの内容を参照し視覚表現を行う部分
-
 例外処理
 rescure_from
 
@@ -172,4 +169,93 @@ params admin
 else
 params
 end
+
+
+# V View
+Modelの内容を参照し視覚表現を行う部分
+- 描画するための天日レートをさがす
+- 探されたテンプレートを元にデータ展開し最終的なHTMLを生成する
+- Rails_ROOT/app/viewe/コントロール名/アクション名.html.elb
+ELB形式のテンプレートエンジン
+
+- renderアクション省略する場合は一致させること
+- renderのオプション
+
+- :text ただのテキストを表示する render text: "OK"
+- :plain text/plainでテキストそのまま render plain: "OK"
+- :html テキストをそのまま表示 render html: "OK"
+- :body :生データをブラウさにそのまま帰る render body: "data"
+- :nothing :明示的に何も表示しない render body: "data"
+- :template 特定のt根プレートを指定してレンダリング render template: "bools/edit.html.erb"
+- :file　特定のファイルの内容をそのまま表示 render file: Rails.root.join('public/sample.html')
+- :inline インラインでテンプレートの内容を書く render inline: "xml.p {'Sample'}, type: :builder
+- :json to_jsonを用いてjsonを表示 render json: @book
+- :xmkl to_xml render xmk: @book
+
+- redirect_to
+- :statusステータスコードの数値化文字列のシンボル
+- partialテンプレートとlayout
+  - :partialをつけると先頭が_で始まるファオルめいのテンプレートから検索する
+   - layoutというディレクト
+   - yieldにコンテンツが展開される
+   - 特定のレイアウトを用いる場合はrenderメソッドをオプションを使えます
+- variants接続してきた端末によってPCとは別のテンプレートを表示したい
+  def detect_mobile_vatiant
+    request.variant = :mobile if request.user_agent =~ /iPhone/
+  end
+
+  # テンプレートエンジンの紹介
+  - 特殊な記法を用いてデータなどを展開し、HTMLを生成するようなライブ拉致をテンプレートエンジンと呼びます。
+
+  - ERB
+    - 標準
+  - Haml
+  - Slim
+
+  # ヘルパーの利用
+  - モデルから受け取ったデータをそのまま表示するのではなく、ユーザーにとってわかりやすいフォーマットに反感する組み込みヘルパー
+  - url_for
+    - Webアプリケーションのパスを構築する
+    - url_for(controller: : users, avtion:: index)
+  - form_tag(ダンジュんあフォーム)/form_fo(モデル)
+  - styledheet_link_tag,javascriot_include_tag
+    - CDATAセレクション
+  - distance_of_time_in_worda_to_now
+    - ある時刻と現在時刻の間にどの程度開きがあるか
+    - helper.distance_of_time_in_words_to_now Time.current
+  - number_with_delimiter
+   - 長い数字に自動的に区切りの記号を入れてくれます。
+  - 独自ヘルパーの定義
+    - app/helper
+    - 全てのアプリケーションのビューの内部から利用できる
+    -
+  # エスケープ処理
+  - <% "<script>alert('sample');<script>"%>
+  - raw(タグを含んだ文字列を構築してそのまま表示する)
+  - String#html_safeを呼び出す
+  - SafeBufferはStringクラスのサブクラス
+  - "<script>alert('sampel')</script>".html_safe
+  - Railsの内部で明治t系に安全であるとマークされた文字列とむなされた上で処理されれう
+  - これは内部でこの文字列が安全かどうか（出力時にエスケープすべきかどうか）という情報を保持しています
+ # API
+  - JSON
+    - Jbuilder
+      - json.extract! @book, :id, :name, :price, :created_at
+      - そのままJsonのキーになる
+      - json.namewith_id "#{@book.id} - #{@book.name}"
+      - json.publisher do
+          json.name @book.publisher.name
+          json.address  @book.publisher.adress
+        end
+       unless @book.high_price?
+        json.low_price treu
+       end
+
+# まとめ
+- Model
+  - Activerecord、バリデーション、コールバック
+- Contoller
+  - ModelとViewを繋ぐ、リクエストオブジェクトやアクションコールバック、脆弱性への対処
+- View
+　- Viewについて受け取ったModelを表示、テンプレートエンジン、ヘルパー、フォーマットでの表示
 
